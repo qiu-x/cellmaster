@@ -1,8 +1,9 @@
 package main
 
 import (
-	"runtime"
+	_ "cellmaster/gui/layout"
 	"github.com/go-gl/glfw/v3.3/glfw"
+	"runtime"
 )
 
 func init() {
