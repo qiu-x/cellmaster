@@ -1,100 +1,98 @@
 package layout
 
-import (
-    "fmt"
-)
-
 type GridLayout struct {
-    Rows         int
-    Columns      int
-    Grid         [][]int
-    RowSizes     []float64
-    ColumnSizes  []float64
+	grid          [][]int
+	RowSizes      []float64
+	ColumnSizes   []float64
+	rowOffsets    []float64
+	columnOffsets []float64
 }
 
 func NewGridLayout(rows, columns int) *GridLayout {
-    grid := make([][]int, rows)
-    for i := range grid {
-        grid[i] = make([]int, columns)
-    }
-    return &GridLayout{
-        Rows:         rows,
-        Columns:      columns,
-        Grid:         grid,
-        RowSizes:     make([]float64, rows),
-        ColumnSizes:  make([]float64, columns),
-    }
-}
-
-func (gl *GridLayout) SetCellValue(row, column, value int) {
-    if row >= 0 && row < gl.Rows && column >= 0 && column < gl.Columns {
-        gl.Grid[row][column] = value
-    } else {
-        fmt.Println("Error: Out of range")
-    }
-}
-
-func (gl *GridLayout) GetCellValue(row, column int) int {
-    if row >= 0 && row < gl.Rows && column >= 0 && column < gl.Columns {
-        return gl.Grid[row][column]
-    } else {
-        fmt.Println("Error: Out of range")
-        return -1 // or any default value indicating error
-    }
-}
-
-func (gl *GridLayout) Resize(rows, columns int) {
-    // Resize the grid
-    newGrid := make([][]int, rows)
-    for i := range newGrid {
-        newGrid[i] = make([]int, columns)
-    }
-
-    // Copy values from the old grid to the new grid
-    for i := 0; i < rows && i < gl.Rows; i++ {
-        copy(newGrid[i], gl.Grid[i])
-    }
-
-    // Resize row sizes
-    if rows >= gl.Rows {
-        gl.RowSizes = append(gl.RowSizes, make([]float64, rows-gl.Rows)...)
-    } else {
-        gl.RowSizes = gl.RowSizes[:rows]
-    }
-
-    // Resize column sizes
-    if columns >= gl.Columns {
-        gl.ColumnSizes = append(gl.ColumnSizes, make([]float64, columns-gl.Columns)...)
-    } else {
-        gl.ColumnSizes = gl.ColumnSizes[:columns]
-    }
-
-    gl.Rows = rows
-    gl.Columns = columns
-    gl.Grid = newGrid
-
-    // Recompute size percentages
-    gl.Recompute()
+	grid := make([][]int, rows)
+	for i := range grid {
+		grid[i] = make([]int, columns)
+	}
+	gridLayout := &GridLayout{
+		grid:          grid,
+		RowSizes:      make([]float64, rows),
+		ColumnSizes:   make([]float64, columns),
+		rowOffsets:    make([]float64, rows),
+		columnOffsets: make([]float64, columns),
+	}
+	gridLayout.Recompute()
+	return gridLayout
 }
 
 func (gl *GridLayout) Recompute() {
-    totalRowSizes := 0.0
-    totalColumnSizes := 0.0
+	for i := range gl.RowSizes {
+		gl.RowSizes[i] = 1/float64(len(gl.grid)) + gl.rowOffsets[i]
+	}
+	for i := range gl.ColumnSizes {
+		gl.ColumnSizes[i] = 1/float64(len(gl.grid[0])) + gl.columnOffsets[i]
+	}
+}
 
-    for _, size := range gl.RowSizes {
-        totalRowSizes += size
-    }
+func (gl *GridLayout) Resize(rows, columns int) {
+	// Resize the grid
+	newGrid := make([][]int, rows)
+	for i := range newGrid {
+		newGrid[i] = make([]int, columns)
+	}
 
-    for _, size := range gl.ColumnSizes {
-        totalColumnSizes += size
-    }
+	// Copy values from the old grid to the new grid
+	for i := range gl.grid {
+		copy(newGrid[i], gl.grid[i])
+	}
 
-    // Normalize row and column sizes to percentages
-    for i := range gl.RowSizes {
-        gl.RowSizes[i] = gl.RowSizes[i] / totalRowSizes * 100
-    }
+	// Resize row sizes
+	if rows >= len(gl.grid) {
+		gl.RowSizes = append(gl.RowSizes, make([]float64, rows-len(gl.grid))...)
+		gl.rowOffsets = append(gl.rowOffsets, make([]float64, rows-len(gl.grid))...)
+	} else {
+		gl.RowSizes = gl.RowSizes[:rows]
+		gl.rowOffsets = gl.rowOffsets[:rows]
+	}
 
-    for i := range gl.ColumnSizes {
-        gl.ColumnSizes[i] = gl.ColumnSizes[i] / totalColumnSizes * 100
-    }
+	// Resize column sizes
+	if columns >= len(gl.grid[0]) {
+		gl.ColumnSizes = append(gl.ColumnSizes, make([]float64, columns-len(gl.grid[0]))...)
+		gl.columnOffsets = append(gl.columnOffsets, make([]float64, columns-len(gl.grid[0]))...)
+	} else {
+		gl.ColumnSizes = gl.ColumnSizes[:columns]
+		gl.columnOffsets = gl.columnOffsets[:columns]
+	}
+
+	gl.grid = newGrid
+
+	// Recompute size percentages
+	gl.Recompute()
+}
+
+func (gl *GridLayout) ResizeRow(row int, newSize float64) {
+	if row > len(gl.grid)-2 {
+		panic("Resized row does not exist or is not resizable (ie. last row)")
+	}
+	if newSize > 1 {
+		newSize = 1
+	}
+	for i := range gl.RowSizes {
+		gl.rowOffsets[i] -= newSize / float64(len(gl.grid)-1)
+	}
+	gl.rowOffsets[row] = newSize
+	gl.Recompute()
+}
+
+func (gl *GridLayout) ResizeColumn(column int, newSize float64) {
+	if column > len(gl.grid[0])-2 {
+		panic("Resized column does not exist or is not resizable (ie. last column)")
+	}
+	if newSize > 1 {
+		newSize = 1
+	}
+	for i := range gl.columnOffsets {
+		gl.columnOffsets[i] -= newSize / float64(len(gl.grid)-1)
+	}
+	gl.columnOffsets[column] = newSize
+	gl.Recompute()
 }
