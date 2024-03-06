@@ -1,17 +1,31 @@
-package layout
+package layouts
+
+import (
+	"cellmaster/gui"
+	"slices"
+)
 
 type GridLayout struct {
-	grid          [][]int
+	parent        *gui.INode
+	grid          [][]*gui.INode
 	RowSizes      []float64
 	ColumnSizes   []float64
 	rowOffsets    []float64
 	columnOffsets []float64
 }
 
+func (gl *GridLayout) Children() []*gui.INode {
+	return slices.Concat(gl.grid...)
+}
+
+func (gl *GridLayout) Parent() *gui.INode {
+	return gl.parent
+}
+
 func NewGridLayout(rows, columns int) *GridLayout {
-	grid := make([][]int, rows)
+	grid := make([][]*gui.INode, rows)
 	for i := range grid {
-		grid[i] = make([]int, columns)
+		grid[i] = make([]*gui.INode, columns)
 	}
 	gridLayout := &GridLayout{
 		grid:          grid,
@@ -35,9 +49,9 @@ func (gl *GridLayout) Recompute() {
 
 func (gl *GridLayout) Resize(rows, columns int) {
 	// Resize the grid
-	newGrid := make([][]int, rows)
+	newGrid := make([][]*gui.INode, rows)
 	for i := range newGrid {
-		newGrid[i] = make([]int, columns)
+		newGrid[i] = make([]*gui.INode, columns)
 	}
 
 	// Copy values from the old grid to the new grid
