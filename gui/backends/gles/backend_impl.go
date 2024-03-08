@@ -1,6 +1,7 @@
 package gles
 
 import (
+	"cellmaster/gui"
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
@@ -22,7 +23,7 @@ func (r *GlesRenderer) Init() {
 	r.window.MakeContextCurrent()
 }
 
-func (r *GlesRenderer) RenderLoop() {
+func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
 	for !r.window.ShouldClose() {
 		r.window.SwapBuffers()
 		glfw.PollEvents()

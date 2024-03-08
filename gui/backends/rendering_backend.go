@@ -1,13 +1,18 @@
 package backends
 
-import "cellmaster/gui/backends/gles"
+import (
+	"cellmaster/gui"
+	"cellmaster/gui/backends/gles"
+)
 
 type RenderingBackend interface {
 	Init()
-	RenderLoop()
+	RenderLoop(*gui.Scene)
 	CleanUp()
 }
 
 func GetBestBackend() RenderingBackend {
-	return &gles.GlesRenderer{}
+	renderer := &gles.GlesRenderer{}
+	renderer.Init()
+	return renderer
 }
