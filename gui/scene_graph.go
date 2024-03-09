@@ -1,5 +1,7 @@
 package gui
 
+import "cellmaster/gui"
+
 type INode interface {
 	Parent() *INode
 	Children() []*INode
@@ -22,6 +24,10 @@ type SceneTree struct {
 	Node
 	parent   *INode
 	children []*INode
+}
+
+func (st *SceneTree) AddChild(node gui.INode) {
+	st.children = append(st.children, node)
 }
 
 type Scene struct {
