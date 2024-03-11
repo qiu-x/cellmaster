@@ -1,4 +1,6 @@
-package backends
+package renderGraph
+
+import "cellmaster/gui"
 
 type IRenderNode interface {
 	Parent() *IRenderNode
@@ -31,3 +33,18 @@ func NewRenderGraph() *RenderGraph {
 		children: make([]*IRenderNode, 0),
 	}
 }
+
+func (n *RenderGraph) FromSceneGraph(sceneGraph *gui.SceneGraph) *RenderGraph {
+	var copyTree func(node gui.INode, tree *RenderGraph)
+	copyTree = func(node gui.INode, tree *RenderGraph) {
+		if node == nil {
+			return
+	    }
+		for _, v := range node.Children() {
+			copyTree(v, tree)
+		}
+	}
+    copyTree(sceneGraph, n)
+    return n
+}
+

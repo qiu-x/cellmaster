@@ -1,71 +1,46 @@
-
-package main
+package layouts
 
 import (
-	"fmt"
-	"math"
+	"cellmaster/gui"
 )
 
-type Container struct {
-	WidthPercent, HeightPercent float64
-	Children                    []*Container
-}
-
 type TiledView struct {
-	Root *Container
+	parent   gui.INode
+	children []gui.INode
+	sizes    []float64
+	offsets  []float64
 }
 
-func NewContainer(widthPercent, heightPercent float64) *Container {
-	return &Container{
-		WidthPercent:  widthPercent,
-		HeightPercent: heightPercent,
-	}
+func (t *TiledView) AddChild(child gui.INode) {
+	t.children = append(t.children, child)
 }
 
-func NewTiledView(root *Container) *TiledView {
-	return &TiledView{Root: root}
+func NewTiledLayout(count int) *TiledView {
+	tiledView := &TiledView{
+		children: make([]gui.INode, count),
+		sizes:    make([]float64, count),
+		offsets:  make([]float64, count),
+	}
+	tiledView.Recompute()
+	return tiledView
 }
 
-func (c *Container) AddChild(child *Container) {
-	c.Children = append(c.Children, child)
-}
-
-func (tv *TiledView) TileInFibonacciLayout(container *Container, availableWidth, availableHeight float64) {
-	if container == nil {
-		return
-	}
-
-	numChildren := len(container.Children)
-	if numChildren == 0 {
-		return
-	}
-
-	fib := []int{1, 1}
-	for fib[len(fib)-1] < numChildren {
-		fib = append(fib, fib[len(fib)-1]+fib[len(fib)-2])
-	}
-
-	totalWidth := 0.0
-	totalHeight := 0.0
-	for _, child := range container.Children {
-		totalWidth += child.WidthPercent
-		totalHeight += child.HeightPercent
-	}
-
-	x := 0.0
-	y := 0.0
-	for i, child := range container.Children {
-		child.WidthPercent = (child.WidthPercent / totalWidth) * availableWidth
-		child.HeightPercent = (child.HeightPercent / totalHeight) * availableHeight
-		fmt.Printf("Container %d: X=%.2f%%, Y=%.2f%%, Width=%.2f%%, Height=%.2f%%\n", i+1, x*100/availableWidth, y*100/availableHeight, child.WidthPercent*100/availableWidth, child.HeightPercent*100/availableHeight)
-		if i < len(fib) {
-			if i%2 == 0 {
-				x += child.WidthPercent
-			} else {
-				y += child.HeightPercent
-			}
-		}
-		tv.TileInFibonacciLayout(child, child.WidthPercent, child.HeightPercent)
+func (gl *TiledView) Recompute() {
+	for i := range gl.sizes {
+		gl.sizes[i] = 1/float64(len(gl.children)) + gl.offsets[i]
 	}
 }
 
+func (gl *TiledView) Resize(row int, newSize float64) {
+	if row > len(gl.children)-2 {
+		panic("Resized row does not exist or is not resizable (ie. last row)")
+	}
+	if newSize > 1 {
+		newSize = 1
+	}
+	for i := range gl.sizes {
+		gl.offsets[i] -= newSize / float64(len(gl.children)-1)
+	}
+	gl.offsets[row] = newSize
+	gl.Recompute()
+}

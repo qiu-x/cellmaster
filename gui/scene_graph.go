@@ -1,43 +1,41 @@
 package gui
 
-import "cellmaster/gui"
-
 type INode interface {
-	Parent() *INode
-	Children() []*INode
+	Parent() INode
+	Children() []INode
 }
 
 type Node struct {
-	parent   *INode
-	children []*INode
+	parent   INode
+	children []INode
 }
 
-func (n *Node) Children() []*INode {
+func (n *Node) Children() []INode {
 	return n.children
 }
 
-func (n *Node) Parent() *INode {
+func (n *Node) Parent() INode {
 	return n.parent
 }
 
-type SceneTree struct {
+type SceneGraph struct {
 	Node
-	parent   *INode
-	children []*INode
+	parent   INode
+	children []INode
 }
 
-func (st *SceneTree) AddChild(node gui.INode) {
+func (st *SceneGraph) AddChild(node INode) {
 	st.children = append(st.children, node)
 }
 
 type Scene struct {
-	Tree SceneTree
+	Tree SceneGraph
 }
 
 func NewScene() *Scene {
-	tree := SceneTree{
+	tree := SceneGraph{
 		parent:   nil,
-		children: make([]*INode, 0),
+		children: make([]INode, 0),
 	}
 	scene := &Scene{
 		Tree: tree,
