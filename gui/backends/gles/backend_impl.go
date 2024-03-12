@@ -2,13 +2,12 @@ package gles
 
 import (
 	"cellmaster/gui"
-	rg "cellmaster/gui/backends/renderGraph"
+	_ "cellmaster/gui/backends/renderGraph"
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
 type GlesRenderer struct {
 	window *glfw.Window
-	supportedElements map[gui.INode]rg.IRenderNode
 }
 
 func (r *GlesRenderer) Init() {
