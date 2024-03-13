@@ -2,13 +2,8 @@ package backends
 
 import (
 	"cellmaster/gui"
-	"cellmaster/gui/elements"
 	"cellmaster/gui/backends/gles"
 )
-
-type RenderingImplementation interface {
-	GetPlaceholderRenderer(elements.Placeholder)
-}
 
 type RenderingBackend interface {
 	Init()

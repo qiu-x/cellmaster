@@ -2,7 +2,10 @@ package gles
 
 import (
 	"cellmaster/gui"
-	_ "cellmaster/gui/backends/renderGraph"
+	"cellmaster/gui/backends/gles/renderNodes"
+	"cellmaster/gui/backends/renderGraph"
+	"cellmaster/gui/elements"
+
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
@@ -33,4 +36,31 @@ func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
 
 func (r *GlesRenderer) CleanUp() {
 	glfw.Terminate()
+}
+
+func getRenderNode(v gui.INode) renderGraph.IRenderNode {
+	switch v.(type) {
+	case *elements.Placeholder:
+		return &renderNodes.Placeholder{}
+	default:
+		return &renderGraph.RenderNodeRoot{}
+	}
+}
+
+func ParseSceneGraph(sceneGraph *gui.SceneGraph) *renderGraph.RenderGraph {
+	rg := renderGraph.NewRenderGraph()
+	var copyTree func(node gui.INode, prev renderGraph.IRenderNode)
+	copyTree = func(node gui.INode, prev renderGraph.IRenderNode) {
+		if node == nil {
+			return
+		}
+		for _, v := range node.Children() {
+			current := getRenderNode(v)
+			*current.Parent() = prev
+			*prev.Children() = append(*current.Children(), &current)
+			copyTree(v, current)
+		}
+	}
+	copyTree(sceneGraph, &rg.Root)
+	return rg
 }
