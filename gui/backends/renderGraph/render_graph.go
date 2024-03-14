@@ -6,6 +6,18 @@ type IRenderNode interface {
 	Render()
 }
 
+type RenderNodeBase struct {
+	parent *IRenderNode
+	children []*IRenderNode
+}
+func (n *RenderNodeBase) Children() *[]*IRenderNode {
+	return &n.children
+}
+
+func (n *RenderNodeBase) Parent() *IRenderNode {
+	return n.parent
+}
+
 type RenderNodeRoot struct {
 	children []*IRenderNode
 }
