@@ -5,19 +5,19 @@ import (
 )
 
 type TiledView struct {
-	parent   gui.INode
-	children []gui.INode
+	parent   gui.IContainer
+	children []gui.IContainer
 	sizes    []float64
 	offsets  []float64
 }
 
-func (t *TiledView) AddChild(child gui.INode) {
+func (t *TiledView) AddChild(child gui.IContainer) {
 	t.children = append(t.children, child)
 }
 
 func NewTiledLayout(count int) *TiledView {
 	tiledView := &TiledView{
-		children: make([]gui.INode, count),
+		children: make([]gui.IContainer, count),
 		sizes:    make([]float64, count),
 		offsets:  make([]float64, count),
 	}

@@ -6,26 +6,26 @@ import (
 )
 
 type GridLayout struct {
-	parent        gui.INode
-	grid          [][]gui.INode
+	parent        gui.IContainer
+	grid          [][]gui.IContainer
 	RowSizes      []float64
 	ColumnSizes   []float64
 	rowOffsets    []float64
 	columnOffsets []float64
 }
 
-func (gl *GridLayout) Children() []gui.INode {
+func (gl *GridLayout) Children() []gui.IContainer {
 	return slices.Concat(gl.grid...)
 }
 
-func (gl *GridLayout) Parent() gui.INode {
+func (gl *GridLayout) Parent() gui.IContainer {
 	return gl.parent
 }
 
 func NewGridLayout(rows, columns int) *GridLayout {
-	grid := make([][]gui.INode, rows)
+	grid := make([][]gui.IContainer, rows)
 	for i := range grid {
-		grid[i] = make([]gui.INode, columns)
+		grid[i] = make([]gui.IContainer, columns)
 	}
 	gridLayout := &GridLayout{
 		grid:          grid,
@@ -49,9 +49,9 @@ func (gl *GridLayout) Recompute() {
 
 func (gl *GridLayout) Resize(rows, columns int) {
 	// Resize the grid
-	newGrid := make([][]gui.INode, rows)
+	newGrid := make([][]gui.IContainer, rows)
 	for i := range newGrid {
-		newGrid[i] = make([]gui.INode, columns)
+		newGrid[i] = make([]gui.IContainer, columns)
 	}
 
 	// Copy values from the old grid to the new grid

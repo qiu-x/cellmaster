@@ -38,27 +38,27 @@ func (r *GlesRenderer) CleanUp() {
 	glfw.Terminate()
 }
 
-func getRenderNode(v gui.INode) renderGraph.IRenderNode {
+func getRenderNode(v gui.IContainer) renderGraph.IRenderNode {
 	switch v.(type) {
 	case *elements.Placeholder:
 		return &renderNodes.Placeholder{}
 	default:
-		return &renderGraph.RenderNodeRoot{}
+		return &renderNodes.Placeholder{}
 	}
 }
 
 func ParseSceneGraph(sceneGraph *gui.SceneGraph) *renderGraph.RenderGraph {
 	rg := renderGraph.NewRenderGraph()
-	var copyTree func(node gui.INode, prev renderGraph.IRenderNode)
-	copyTree = func(node gui.INode, prev renderGraph.IRenderNode) {
+	var copyTree func(node gui.IContainer, prev renderGraph.IRenderNode)
+	copyTree = func(node gui.IContainer, prev renderGraph.IRenderNode) {
 		if node == nil {
 			return
 		}
-		for _, v := range node.Children() {
-			current := getRenderNode(v)
+		for _, v := range *node.Children() {
+			current := getRenderNode(*v)
 			*current.Parent() = prev
 			*prev.Children() = append(*current.Children(), &current)
-			copyTree(v, current)
+			copyTree(*v, current)
 		}
 	}
 	copyTree(sceneGraph, &rg.Root)

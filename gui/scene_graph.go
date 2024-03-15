@@ -1,31 +1,29 @@
 package gui
 
-type INode interface {
-	Parent() INode
-	Children() []INode
+type IContainer interface {
+	Parent() *IContainer
+	Children() *[]*IContainer
 }
 
-type Node struct {
-	parent   INode
-	children []INode
-}
-
-func (n *Node) Children() []INode {
-	return n.children
-}
-
-func (n *Node) Parent() INode {
-	return n.parent
+type IElement interface {
+	Parent() *IContainer
 }
 
 type SceneGraph struct {
-	Node
-	parent   INode
-	children []INode
+	parent   *IContainer
+	children []*IContainer
 }
 
-func (st *SceneGraph) AddChild(node INode) {
-	st.children = append(st.children, node)
+func (sg *SceneGraph) Children() *[]*IContainer {
+	return &sg.children
+}
+
+func (sg *SceneGraph) Parent() *IContainer {
+	return sg.parent
+}
+
+func (sg *SceneGraph) AddChild(node *IContainer) {
+	sg.children = append(sg.children, node)
 }
 
 type Scene struct {
@@ -35,7 +33,7 @@ type Scene struct {
 func NewScene() *Scene {
 	tree := SceneGraph{
 		parent:   nil,
-		children: make([]INode, 0),
+		children: make([]*IContainer, 0),
 	}
 	scene := &Scene{
 		Tree: tree,
