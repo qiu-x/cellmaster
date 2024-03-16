@@ -16,6 +16,6 @@ func main() {
 	defer renderer.CleanUp()
 
 	scene := gui.NewScene()
-	scene.Tree.AddChild(layouts.NewGridLayout(2, 2))
+	scene.Tree.AddChild(layouts.NewTiledLayout(1))
 	renderer.RenderLoop(scene)
 }

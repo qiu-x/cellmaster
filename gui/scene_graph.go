@@ -22,8 +22,8 @@ func (sg *SceneGraph) Parent() *IContainer {
 	return sg.parent
 }
 
-func (sg *SceneGraph) AddChild(node *IContainer) {
-	sg.children = append(sg.children, node)
+func (sg *SceneGraph) AddChild(node IContainer) {
+	sg.children = append(sg.children, &node)
 }
 
 type Scene struct {
