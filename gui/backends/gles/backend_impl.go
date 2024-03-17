@@ -38,9 +38,31 @@ func (r *GlesRenderer) CleanUp() {
 	glfw.Terminate()
 }
 
-func getRenderNode(v gui.IContainer) renderGraph.IRenderNode {
+func getRenderNode(v gui.IElement) renderGraph.IRenderNode {
 	switch v.(type) {
+	case gui.IElement:
+		return getElementRenderer(v)
+	case gui.IContainer:
+		return getContainerRenderer(v.(gui.IContainer))
+	default:
+		return &renderNodes.Placeholder{}
+	}
+}
+
+func getElementRenderer(v gui.IElement) renderGraph.IRenderNode {
+	switch v.(type) {
+	case *layouts.TiledView:
+		return &renderNodes.Placeholder{}
 	case *elements.Placeholder:
+		return &renderNodes.Placeholder{}
+	default:
+		return &renderNodes.Placeholder{}
+	}
+}
+
+func getContainerRenderer(v gui.IContainer) renderGraph.IRenderNode {
+	switch v.(type) {
+	case *layouts.TiledView:
 		return &renderNodes.Placeholder{}
 	default:
 		return &renderNodes.Placeholder{}
