@@ -2,10 +2,10 @@ package renderNodes
 
 import "cellmaster/gui/backends/renderGraph"
 
-type Placeholder struct {
+type TiledView struct {
 	renderGraph.RenderNodeBase
 }
 
-func (p *Placeholder) Render() {
+func (p *TiledView) Render() {
 	panic("unimplemented")
 }
