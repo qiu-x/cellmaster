@@ -2,7 +2,7 @@ package gui
 
 type IContainer interface {
 	Parent() *IContainer
-	Children() *[]*IContainer
+	Children() *[]*IElement
 }
 
 type IElement interface {
@@ -11,10 +11,10 @@ type IElement interface {
 
 type SceneGraph struct {
 	parent   *IContainer
-	children []*IContainer
+	children []*IElement
 }
 
-func (sg *SceneGraph) Children() *[]*IContainer {
+func (sg *SceneGraph) Children() *[]*IElement {
 	return &sg.children
 }
 
@@ -22,7 +22,7 @@ func (sg *SceneGraph) Parent() *IContainer {
 	return sg.parent
 }
 
-func (sg *SceneGraph) AddChild(node IContainer) {
+func (sg *SceneGraph) AddChild(node IElement) {
 	sg.children = append(sg.children, &node)
 }
 
@@ -33,7 +33,7 @@ type Scene struct {
 func NewScene() *Scene {
 	tree := SceneGraph{
 		parent:   nil,
-		children: make([]*IContainer, 0),
+		children: make([]*IElement, 0),
 	}
 	scene := &Scene{
 		Tree: tree,

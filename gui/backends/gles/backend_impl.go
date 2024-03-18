@@ -81,7 +81,9 @@ func ParseSceneGraph(sceneGraph *gui.SceneGraph) *renderGraph.RenderGraph {
 			current := getRenderNode(*v)
 			*current.Parent() = prev
 			*prev.Children() = append(*current.Children(), &current)
-			copyTree(*v, current)
+			if container, ok := (*v).(gui.IContainer); ok {
+				copyTree(container, current)
+			}
 		}
 	}
 	copyTree(sceneGraph, &rg.Root)
