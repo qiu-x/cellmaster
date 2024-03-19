@@ -19,36 +19,40 @@ func (t TiledView) Parent() *gui.IContainer {
 	return t.parent
 }
 
-func (t *TiledView) AddChild(child gui.IElement) {
+func (t *TiledView) AddChild(child gui.IElement) *TiledView {
 	t.children = append(t.children, &child)
+	t.sizes = append(t.sizes, 0)
+	t.offsets = append(t.offsets, 0)
+	t.Recompute()
+	return t
 }
 
-func NewTiledLayout(count int) *TiledView {
+func NewTiledLayout() *TiledView {
 	tiledView := &TiledView{
 		children: make([]*gui.IElement, 0),
-		sizes:    make([]float64, count),
-		offsets:  make([]float64, count),
+		sizes:    make([]float64, 0),
+		offsets:  make([]float64, 0),
 	}
 	tiledView.Recompute()
 	return tiledView
 }
 
-func (gl *TiledView) Recompute() {
-	for i := range gl.sizes {
-		gl.sizes[i] = 1/float64(len(gl.children)) + gl.offsets[i]
+func (t *TiledView) Recompute() {
+	for i := range t.sizes {
+		t.sizes[i] = 1/float64(len(t.children)) + t.offsets[i]
 	}
 }
 
-func (gl *TiledView) Resize(row int, newSize float64) {
-	if row > len(gl.children)-2 {
+func (t *TiledView) Resize(elm int, newSize float64) {
+	if elm > len(t.children)-2 {
 		panic("Resized row does not exist or is not resizable (ie. last row)")
 	}
 	if newSize > 1 {
 		newSize = 1
 	}
-	for i := range gl.sizes {
-		gl.offsets[i] -= newSize / float64(len(gl.children)-1)
+	for i := range t.sizes {
+		t.offsets[i] -= newSize / float64(len(t.children)-1)
 	}
-	gl.offsets[row] = newSize
-	gl.Recompute()
+	t.offsets[elm] = newSize
+	t.Recompute()
 }
