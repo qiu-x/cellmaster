@@ -5,14 +5,15 @@ import "cellmaster/gui"
 type IRenderNode interface {
 	Parent() *IRenderNode
 	Children() *[]*IRenderNode
-	From(gui.IContainer) *IRenderNode
+	Load(gui.IContainer)
 	Render()
 }
 
 type RenderNodeBase struct {
-	parent *IRenderNode
+	parent   *IRenderNode
 	children []*IRenderNode
 }
+
 func (n *RenderNodeBase) Children() *[]*IRenderNode {
 	return &n.children
 }
@@ -23,6 +24,11 @@ func (n *RenderNodeBase) Parent() *IRenderNode {
 
 type RenderNodeRoot struct {
 	children []*IRenderNode
+}
+
+// Stub to implement IRenderNode.
+func (n *RenderNodeRoot) Load(gui.IContainer) {
+	panic("unimplemented")
 }
 
 func (n *RenderNodeRoot) Children() *[]*IRenderNode {
