@@ -52,8 +52,6 @@ func getRenderNode(v gui.IElement) renderGraph.IRenderNode {
 
 func getElementRenderer(v gui.IElement) renderGraph.IRenderNode {
 	switch v.(type) {
-	case *layouts.TiledView:
-		return &renderNodes.Placeholder{}
 	case *elements.Placeholder:
 		return &renderNodes.Placeholder{}
 	default:
@@ -64,7 +62,7 @@ func getElementRenderer(v gui.IElement) renderGraph.IRenderNode {
 func getContainerRenderer(v gui.IContainer) renderGraph.IRenderNode {
 	switch v.(type) {
 	case *layouts.TiledView:
-		return &renderNodes.Placeholder{}
+		return &renderNodes.TiledView{}
 	default:
 		return &renderNodes.Placeholder{}
 	}

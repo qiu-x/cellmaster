@@ -1,8 +1,11 @@
 package renderGraph
 
+import "cellmaster/gui"
+
 type IRenderNode interface {
 	Parent() *IRenderNode
 	Children() *[]*IRenderNode
+	From(gui.IContainer) *IRenderNode
 	Render()
 }
 
