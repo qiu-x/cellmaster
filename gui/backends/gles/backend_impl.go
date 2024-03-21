@@ -30,6 +30,8 @@ func (r *GlesRenderer) Init() {
 
 func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
 	for !r.window.ShouldClose() {
+		renderGraph := ParseSceneGraph(&scene.Tree)
+		renderGraph.Root.Render()
 		r.window.SwapBuffers()
 		glfw.PollEvents()
 	}
@@ -41,10 +43,10 @@ func (r *GlesRenderer) CleanUp() {
 
 func getRenderNode(v gui.IElement) renderGraph.IRenderNode {
 	switch v.(type) {
-	case gui.IElement:
-		return getElementRenderer(v)
 	case gui.IContainer:
 		return getContainerRenderer(v.(gui.IContainer))
+	case gui.IElement:
+		return getElementRenderer(v)
 	default:
 		return &renderNodes.Placeholder{}
 	}
@@ -62,7 +64,9 @@ func getElementRenderer(v gui.IElement) renderGraph.IRenderNode {
 func getContainerRenderer(v gui.IContainer) renderGraph.IRenderNode {
 	switch v.(type) {
 	case *layouts.TiledView:
-		return &renderNodes.TiledView{}
+		c := &renderNodes.TiledView{}
+		c.Load(v)
+		return c
 	default:
 		return &renderNodes.Placeholder{}
 	}
@@ -77,7 +81,9 @@ func ParseSceneGraph(sceneGraph *gui.SceneGraph) *renderGraph.RenderGraph {
 		}
 		for _, v := range *node.Children() {
 			current := getRenderNode(*v)
-			*current.Parent() = prev
+			if current.Parent() != nil {
+				*current.Parent() = prev
+			}
 			*prev.Children() = append(*current.Children(), &current)
 			if container, ok := (*v).(gui.IContainer); ok {
 				copyTree(container, current)

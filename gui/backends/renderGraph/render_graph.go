@@ -39,7 +39,11 @@ func (n *RenderNodeRoot) Parent() *IRenderNode {
 	return nil
 }
 
-func (n *RenderNodeRoot) Render() {}
+func (n *RenderNodeRoot) Render() {
+	for _, v := range n.children {
+		(*v).Render()
+	}
+}
 
 type RenderGraph struct {
 	Root RenderNodeRoot
