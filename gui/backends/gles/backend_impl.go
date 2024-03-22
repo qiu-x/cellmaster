@@ -6,8 +6,10 @@ import (
 	"cellmaster/gui/backends/renderGraph"
 	"cellmaster/gui/elements"
 	"cellmaster/gui/layouts"
+	"fmt"
 
 	"github.com/go-gl/glfw/v3.3/glfw"
+	gl "github.com/go-gl/gl/v3.1/gles2"
 )
 
 type GlesRenderer struct {
@@ -21,11 +23,25 @@ func (r *GlesRenderer) Init() {
 		panic(err)
 	}
 
+	glfw.WindowHint(glfw.ClientAPI, glfw.OpenGLESAPI)
+	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLAnyProfile)
+	glfw.WindowHint(glfw.ContextVersionMajor, 3)
+	glfw.WindowHint(glfw.ContextVersionMinor, 0)
+	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
+
 	r.window, err = glfw.CreateWindow(640, 480, "Testing", nil, nil)
 	if err != nil {
 		panic(err)
 	}
+
 	r.window.MakeContextCurrent()
+
+	if err := gl.Init(); err != nil {
+		panic(err)
+	}
+	
+	version := gl.GoStr(gl.GetString(gl.VERSION))
+	fmt.Println("OpenGL version:", version)
 }
 
 func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
