@@ -46,6 +46,7 @@ func (r *GlesRenderer) Init() {
 
 func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
 	for !r.window.ShouldClose() {
+		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 		renderGraph := ParseSceneGraph(&scene.Tree)
 		renderGraph.Root.Render()
 		r.window.SwapBuffers()
