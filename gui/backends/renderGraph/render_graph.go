@@ -26,23 +26,20 @@ type RenderNodeRoot struct {
 	children []*IRenderNode
 }
 
-// Stub to implement IRenderNode.
-func (n *RenderNodeRoot) Load(gui.IContainer) {
-	panic("unimplemented")
-}
-
-func (n *RenderNodeRoot) Children() *[]*IRenderNode {
+func (n RenderNodeRoot) Children() *[]*IRenderNode {
 	return &n.children
 }
 
-func (n *RenderNodeRoot) Parent() *IRenderNode {
+func (n RenderNodeRoot) Load(gui.IContainer) {
+	panic("unimplemented")
+}
+
+func (n RenderNodeRoot) Parent() *IRenderNode {
 	return nil
 }
 
-func (n *RenderNodeRoot) Render() {
-	for _, v := range n.children {
-		(*v).Render()
-	}
+func (n RenderNodeRoot) Render() {
+	return
 }
 
 type RenderGraph struct {

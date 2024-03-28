@@ -44,11 +44,23 @@ func (r *GlesRenderer) Init() {
 	fmt.Println("OpenGL version:", version)
 }
 
+func RenderTree(node renderGraph.IRenderNode) {
+	node.Render()
+	if node.Children() == nil {
+		return
+	}
+	for _, v := range *(node.Children()) {
+		fmt.Println("more his")
+		RenderTree(*v)
+	}
+}
+
 func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
 	for !r.window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 		renderGraph := ParseSceneGraph(&scene.Tree)
-		renderGraph.Root.Render()
+		// renderGraph.Root.Render()
+		RenderTree(renderGraph.Root)
 		r.window.SwapBuffers()
 		glfw.PollEvents()
 	}
