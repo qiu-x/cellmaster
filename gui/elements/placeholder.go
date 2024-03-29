@@ -6,10 +6,10 @@ import "cellmaster/gui"
 // Fills the containing elements
 type Placeholder struct {
 	parent   *gui.IContainer
-	children []*gui.IContainer
+	children []gui.IContainer
 }
 
-func (p *Placeholder) Children() *[]*gui.IContainer {
+func (p *Placeholder) Children() *[]gui.IContainer {
 	return &p.children
 }
 

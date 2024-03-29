@@ -6,21 +6,21 @@ import (
 
 type TiledView struct {
 	parent   *gui.IContainer
-	children []*gui.IElement
+	children []gui.IElement
 	sizes    []float64
 	offsets  []float64
 }
 
-func (t TiledView) Children() *[]*gui.IElement {
+func (t *TiledView) Children() *[]gui.IElement {
 	return &t.children
 }
 
-func (t TiledView) Parent() *gui.IContainer {
+func (t *TiledView) Parent() *gui.IContainer {
 	return t.parent
 }
 
 func (t *TiledView) AddChild(child gui.IElement) *TiledView {
-	t.children = append(t.children, &child)
+	t.children = append(t.children, child)
 	t.sizes = append(t.sizes, 0)
 	t.offsets = append(t.offsets, 0)
 	t.Recompute()
@@ -29,7 +29,7 @@ func (t *TiledView) AddChild(child gui.IElement) *TiledView {
 
 func NewTiledLayout() *TiledView {
 	tiledView := &TiledView{
-		children: make([]*gui.IElement, 0),
+		children: make([]gui.IElement, 0),
 		sizes:    make([]float64, 0),
 		offsets:  make([]float64, 0),
 	}

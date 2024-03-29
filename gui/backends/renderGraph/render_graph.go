@@ -4,17 +4,17 @@ import "cellmaster/gui"
 
 type IRenderNode interface {
 	Parent() *IRenderNode
-	Children() *[]*IRenderNode
+	Children() *[]IRenderNode
 	Load(gui.IContainer)
 	Render()
 }
 
 type RenderNodeBase struct {
 	parent   *IRenderNode
-	children []*IRenderNode
+	children []IRenderNode
 }
 
-func (n *RenderNodeBase) Children() *[]*IRenderNode {
+func (n *RenderNodeBase) Children() *[]IRenderNode {
 	return &n.children
 }
 
@@ -23,10 +23,10 @@ func (n *RenderNodeBase) Parent() *IRenderNode {
 }
 
 type RenderNodeRoot struct {
-	children []*IRenderNode
+	children []IRenderNode
 }
 
-func (n RenderNodeRoot) Children() *[]*IRenderNode {
+func (n RenderNodeRoot) Children() *[]IRenderNode {
 	return &n.children
 }
 
@@ -49,7 +49,7 @@ type RenderGraph struct {
 func NewRenderGraph() *RenderGraph {
 	return &RenderGraph{
 		Root: RenderNodeRoot{
-			children: make([]*IRenderNode, 0),
+			children: make([]IRenderNode, 0),
 		},
 	}
 }
