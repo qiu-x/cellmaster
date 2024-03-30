@@ -45,12 +45,10 @@ func (r *GlesRenderer) Init() {
 }
 
 func RenderTree(node renderGraph.IRenderNode) {
-	fmt.Println("node:", node)
 	node.Render()
 	if node.Children() == nil {
 		return
 	}
-	fmt.Println("children:", node.Children())
 	for _, v := range *(node.Children()) {
 		fmt.Println("here")
 		RenderTree(v)
