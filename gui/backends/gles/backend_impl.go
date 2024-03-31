@@ -50,7 +50,6 @@ func RenderTree(node renderGraph.IRenderNode) {
 		return
 	}
 	for _, v := range *(node.Children()) {
-		fmt.Println("here")
 		RenderTree(v)
 	}
 }
@@ -60,7 +59,6 @@ func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 		renderGraph := ParseSceneGraph(&scene.Tree)
 		renderGraph.Root.Render()
-		fmt.Println("root:", renderGraph.Root)
 		// RenderTree(renderGraph.Root)
 		r.window.SwapBuffers()
 		glfw.PollEvents()
@@ -104,20 +102,23 @@ func getContainerRenderer(v gui.IContainer) renderGraph.IRenderNode {
 
 func ParseSceneGraph(sceneGraph *gui.SceneGraph) *renderGraph.RenderGraph {
 	rg := renderGraph.NewRenderGraph()
-	var copyTree func(node gui.IContainer, prev renderGraph.IRenderNode)
-	copyTree = func(node gui.IContainer, prev renderGraph.IRenderNode) {
-		if node == nil {
+	var copyTree func(gui.IContainer, renderGraph.IRenderNode)
+	copyTree = func(scn gui.IContainer, prev renderGraph.IRenderNode) {
+		if scn == nil {
 			return
 		}
-		for _, v := range *node.Children() {
+		for _, v := range *scn.Children() {
 			current := getRenderNode(v)
 			if current.Parent() != nil {
 				*current.Parent() = prev
 			}
+			fmt.Println("append", prev.Children(), current)
 			*prev.Children() = append(*prev.Children(), current)
+			fmt.Println("children:", *prev.Children())
 			if container, ok := (v).(gui.IContainer); ok {
 				copyTree(container, current)
 			}
+			fmt.Println("children after:", *prev.Children())
 		}
 	}
 	copyTree(sceneGraph, &rg.Root)
