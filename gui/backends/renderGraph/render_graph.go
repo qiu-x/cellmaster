@@ -26,19 +26,19 @@ type RenderNodeRoot struct {
 	children []IRenderNode
 }
 
-func (n RenderNodeRoot) Children() *[]IRenderNode {
+func (n *RenderNodeRoot) Children() *[]IRenderNode {
 	return &n.children
 }
 
-func (n RenderNodeRoot) Load(gui.IContainer) {
+func (n *RenderNodeRoot) Load(gui.IContainer) {
 	panic("unimplemented")
 }
 
-func (n RenderNodeRoot) Parent() *IRenderNode {
+func (n *RenderNodeRoot) Parent() *IRenderNode {
 	return nil
 }
 
-func (n RenderNodeRoot) Render() {
+func (n *RenderNodeRoot) Render() {
 	return
 }
 

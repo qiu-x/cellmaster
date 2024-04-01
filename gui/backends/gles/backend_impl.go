@@ -58,8 +58,8 @@ func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
 	for !r.window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 		renderGraph := ParseSceneGraph(&scene.Tree)
-		renderGraph.Root.Render()
-		// RenderTree(renderGraph.Root)
+		// renderGraph.Root.Render()
+		RenderTree(&renderGraph.Root)
 		r.window.SwapBuffers()
 		glfw.PollEvents()
 	}
@@ -109,20 +109,15 @@ func ParseSceneGraph(sceneGraph *gui.SceneGraph) *renderGraph.RenderGraph {
 		}
 		for _, v := range *scn.Children() {
 			current := getRenderNode(v)
-			if current.Parent() != nil {
+			if prev.Parent() != nil {
 				*current.Parent() = prev
 			}
-			fmt.Println("append", prev.Children(), current)
 			*prev.Children() = append(*prev.Children(), current)
-			fmt.Println("children:", *prev.Children())
 			if container, ok := (v).(gui.IContainer); ok {
 				copyTree(container, current)
 			}
-			fmt.Println("children after:", *prev.Children())
 		}
 	}
 	copyTree(sceneGraph, &rg.Root)
-	fmt.Println("oldtree:", sceneGraph)
-	fmt.Println("newtree:", rg.Root)
 	return rg
 }
