@@ -9,10 +9,6 @@ type Placeholder struct {
 	renderGraph.RenderNodeBase
 }
 
-func (p *Placeholder) Load(gui.IContainer) {
-	panic("unimplemented")
-}
+func (p *Placeholder) Load(gui.IContainer) {}
 
-func (p *Placeholder) Render() {
-	panic("unimplemented")
-}
+func (p *Placeholder) Render() {}
