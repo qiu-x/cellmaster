@@ -9,6 +9,15 @@ type IElement interface {
 	Parent() *IContainer
 }
 
+type ISlot interface {
+	Dimetions() Rect
+	Element() IElement
+}
+
+type Rect struct {
+	X, Y, Width, Height int
+}
+
 type SceneGraph struct {
 	parent   *IContainer
 	children []IElement
