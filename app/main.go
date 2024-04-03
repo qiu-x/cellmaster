@@ -3,8 +3,8 @@ package main
 import (
 	"cellmaster/gui"
 	"cellmaster/gui/backends"
-	"cellmaster/gui/elements"
-	"cellmaster/gui/layouts"
+	_ "cellmaster/gui/elements"
+	_ "cellmaster/gui/layouts"
 	"runtime"
 )
 
@@ -16,11 +16,11 @@ func main() {
 	renderer := backends.GetBestBackend()
 	defer renderer.CleanUp()
 
-	tilled := layouts.NewTiledLayout().
-		AddChild(&elements.Placeholder{}).
-		AddChild(&elements.Placeholder{})
+	// tilled := layouts.NewTiledLayout()
+		// AddChild(&elements.Placeholder{}).
+		// AddChild(&elements.Placeholder{})
 
 	scene := gui.NewScene()
-	scene.Tree.AddChild(tilled)
+	// scene.Tree.AddChild(tilled)
 	renderer.RenderLoop(scene)
 }

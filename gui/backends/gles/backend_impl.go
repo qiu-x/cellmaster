@@ -107,8 +107,8 @@ func ParseSceneGraph(sceneGraph *gui.SceneGraph) *renderGraph.RenderGraph {
 		if scn == nil {
 			return
 		}
-		for _, v := range *scn.Children() {
-			current := getRenderNode(v)
+		for _, v := range *scn.Slots() {
+			current := getRenderNode(v.Element())
 			if prev.Parent() != nil {
 				*current.Parent() = prev
 			}
