@@ -57,7 +57,7 @@ func RenderTree(node renderGraph.IRenderNode) {
 func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
 	for !r.window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-		renderGraph := ParseSceneGraph(&scene.Tree)
+		renderGraph := ParseScene(&scene.Tree)
 		// renderGraph.Root.Render()
 		RenderTree(&renderGraph.Root)
 		r.window.SwapBuffers()
@@ -100,7 +100,7 @@ func getContainerRenderer(v gui.IContainer) renderGraph.IRenderNode {
 	}
 }
 
-func ParseSceneGraph(sceneGraph *gui.SceneGraph) *renderGraph.RenderGraph {
+func ParseScene(sceneGraph *gui.SceneRoot) *renderGraph.RenderGraph {
 	rg := renderGraph.NewRenderGraph()
 	var copyTree func(gui.IContainer, renderGraph.IRenderNode)
 	copyTree = func(scn gui.IContainer, prev renderGraph.IRenderNode) {

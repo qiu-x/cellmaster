@@ -5,7 +5,7 @@ import (
 )
 
 type TiledView struct {
-	parent   *gui.IContainer
+	parent   *gui.Slot
 	children []gui.Slot
 	sizes    []float64
 	offsets  []float64
@@ -15,12 +15,15 @@ func (t *TiledView) Slots() *[]gui.Slot {
 	return &t.children
 }
 
-func (t *TiledView) Parent() *gui.IContainer {
+func (t *TiledView) Parent() *gui.Slot {
 	return t.parent
 }
 
-func (t *TiledView) AddChild(child gui.Slot) *TiledView {
-	t.children = append(t.children, child)
+func (t *TiledView) AddChild(child gui.IElement) *TiledView {
+	t.children = append(t.children, gui.Slot{
+		Dimetions: gui.Rect{},
+		Element:   child,
+	})
 	t.sizes = append(t.sizes, 0)
 	t.offsets = append(t.offsets, 0)
 	t.Recompute()

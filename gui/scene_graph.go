@@ -1,46 +1,49 @@
 package gui
 
 type IContainer interface {
-	Parent() *IContainer
+	Parent() *Slot
 	Slots() *[]Slot
 }
 
 type IElement interface {
-	Parent() *IContainer
+	Parent() *Slot
 }
 
 type Slot struct {
 	Dimetions Rect
-	Element IElement
+	Element   IElement
 }
 
 type Rect struct {
 	X, Y, Width, Height int
 }
 
-type SceneGraph struct {
+type SceneRoot struct {
 	parent   *IContainer
 	children []Slot
 }
 
-func (sg *SceneGraph) Slots() *[]Slot {
+func (sg *SceneRoot) Slots() *[]Slot {
 	return &sg.children
 }
 
-func (sg *SceneGraph) Parent() *IContainer {
-	return sg.parent
+func (sg *SceneRoot) Parent() *Slot {
+	return nil
 }
 
-func (sg *SceneGraph) AddChild(node Slot) {
-	sg.children = append(sg.children, node)
+func (sg *SceneRoot) AddChild(node IElement) {
+	sg.children = append(sg.children, Slot{
+		Dimetions: Rect{},
+		Element:   node,
+	})
 }
 
 type Scene struct {
-	Tree SceneGraph
+	Tree SceneRoot
 }
 
 func NewScene() *Scene {
-	tree := SceneGraph{
+	tree := SceneRoot{
 		parent:   nil,
 		children: make([]Slot, 0),
 	}
