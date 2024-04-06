@@ -20,35 +20,28 @@ type Rect struct {
 
 type SceneRoot struct {
 	parent   *IContainer
-	children []Slot
-}
-
-func (sg *SceneRoot) Slots() *[]Slot {
-	return &sg.children
-}
-
-func (sg *SceneRoot) Parent() *Slot {
-	return nil
-}
-
-func (sg *SceneRoot) AddChild(node IElement) {
-	sg.children = append(sg.children, Slot{
-		Dimetions: Rect{},
-		Element:   node,
-	})
+	MainView Slot
 }
 
 type Scene struct {
-	Tree SceneRoot
+	Root SceneRoot
 }
 
-func NewScene() *Scene {
+func NewScene(elem IContainer) *Scene {
 	tree := SceneRoot{
-		parent:   nil,
-		children: make([]Slot, 0),
+		parent: nil,
+		MainView: Slot{
+			Dimetions: Rect{
+				X:      0,
+				Y:      0,
+				Width:  600,
+				Height: 400,
+			},
+			Element: elem,
+		},
 	}
 	scene := &Scene{
-		Tree: tree,
+		Root: tree,
 	}
 	return scene
 }
