@@ -14,6 +14,12 @@ type Slot struct {
 	Element   IElement
 }
 
+func (s* Slot) AsContainer() (cnt IContainer, ok bool) {
+	cnt, ok = s.Element.(IContainer)
+	return
+}
+
+
 type Rect struct {
 	X, Y, Width, Height int
 }
@@ -28,7 +34,7 @@ type Scene struct {
 }
 
 func NewScene(elem IContainer) *Scene {
-	tree := SceneRoot{
+	root := SceneRoot{
 		parent: nil,
 		MainView: Slot{
 			Dimetions: Rect{
@@ -41,7 +47,7 @@ func NewScene(elem IContainer) *Scene {
 		},
 	}
 	scene := &Scene{
-		Root: tree,
+		Root: root,
 	}
 	return scene
 }

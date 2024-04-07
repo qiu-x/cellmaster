@@ -119,6 +119,16 @@ func ParseScene(scene *gui.SceneRoot) *renderGraph.RenderGraph {
 			}
 		}
 	}
-	copyTree(scene.MainView.Element.(gui.IContainer), &rg.Root)
+
+	// Set root RenderNode
+	mainContainer, ok := scene.MainView.AsContainer()
+	if !ok {
+		return rg
+	}
+
+	rootRenderNode := getRenderNode(mainContainer)
+	*rg.Root.Children() = append(*rg.Root.Children(), rootRenderNode)
+	copyTree(mainContainer, rootRenderNode)
+
 	return rg
 }
