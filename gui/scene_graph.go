@@ -37,12 +37,7 @@ func NewScene(elem IContainer) *Scene {
 	root := SceneRoot{
 		parent: nil,
 		MainView: Slot{
-			Dimetions: Rect{
-				X:      0,
-				Y:      0,
-				Width:  600,
-				Height: 400,
-			},
+			Dimetions: Rect{}, // value not used
 			Element: elem,
 		},
 	}
