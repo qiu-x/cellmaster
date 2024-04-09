@@ -9,6 +9,7 @@ type RenderingBackend interface {
 	Init()
 	RenderLoop(*gui.Scene)
 	CleanUp()
+	WindowRectRef() *gui.Rect
 }
 
 func GetBestBackend() RenderingBackend {
