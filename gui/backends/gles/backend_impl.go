@@ -14,21 +14,6 @@ import (
 
 type GlesRenderer struct {
 	window *glfw.Window
-	windowRect gui.Rect
-}
-
-func (r *GlesRenderer) WindowRectRef() *gui.Rect {
-	return &r.windowRect
-}
-
-func (r *GlesRenderer) UpdateWindowRect() {
-	width, height := r.window.GetFramebufferSize()
-	r.windowRect = gui.Rect{
-		X:      0,
-		Y:      0,
-		Width:  width,
-		Height: height,
-	}
 }
 
 func (r *GlesRenderer) Init() {
@@ -55,7 +40,6 @@ func (r *GlesRenderer) Init() {
 		panic(err)
 	}
 
-	r.UpdateWindowRect()
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	fmt.Println("OpenGL version:", version)
 }
@@ -78,7 +62,6 @@ func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
 		RenderTree(&renderGraph.Root)
 		r.window.SwapBuffers()
 		glfw.PollEvents()
-		r.UpdateWindowRect()
 	}
 }
 
@@ -137,9 +120,15 @@ func ParseScene(scene *gui.SceneRoot) *renderGraph.RenderGraph {
 		}
 	}
 
-	rootRenderNode := getRenderNode(scene.MainView)
+	// Set root RenderNode
+	mainContainer, ok := scene.MainView.AsContainer()
+	if !ok {
+		return rg
+	}
+
+	rootRenderNode := getRenderNode(mainContainer)
 	*rg.Root.Children() = append(*rg.Root.Children(), rootRenderNode)
-	copyTree(scene.MainView, rootRenderNode)
+	copyTree(mainContainer, rootRenderNode)
 
 	return rg
 }

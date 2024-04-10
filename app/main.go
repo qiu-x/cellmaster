@@ -20,6 +20,6 @@ func main() {
 		AddChild(&elements.Placeholder{}).
 		AddChild(&elements.Placeholder{})
 
-	scene := gui.NewScene(tilled, renderer.WindowRectRef())
+	scene := gui.NewScene(tilled)
 	renderer.RenderLoop(scene)
 }

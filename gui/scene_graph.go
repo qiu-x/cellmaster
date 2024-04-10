@@ -19,24 +19,27 @@ func (s* Slot) AsContainer() (cnt IContainer, ok bool) {
 	return
 }
 
+
 type Rect struct {
 	X, Y, Width, Height int
 }
 
 type SceneRoot struct {
-	Dimetions *Rect
-	MainView   IContainer
+	parent   *IContainer
+	MainView Slot
 }
 
 type Scene struct {
 	Root SceneRoot
-	WindowRect Rect
 }
 
-func NewScene(elem IContainer, rect *Rect) *Scene {
+func NewScene(elem IContainer) *Scene {
 	root := SceneRoot{
-		Dimetions: rect,
-		MainView:  elem,
+		parent: nil,
+		MainView: Slot{
+			Dimetions: Rect{}, // value not used
+			Element: elem,
+		},
 	}
 	scene := &Scene{
 		Root: root,
