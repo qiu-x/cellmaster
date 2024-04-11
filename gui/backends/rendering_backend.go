@@ -1,13 +1,13 @@
 package backends
 
 import (
-	"cellmaster/gui"
 	"cellmaster/gui/backends/gles"
+	"cellmaster/gui/scenegraph"
 )
 
 type RenderingBackend interface {
 	Init()
-	RenderLoop(*gui.Scene)
+	RenderLoop(*scenegraph.Scene)
 	CleanUp()
 }
 

@@ -6,6 +6,7 @@ import (
 	"cellmaster/gui/backends/renderGraph"
 	"cellmaster/gui/elements"
 	"cellmaster/gui/layouts"
+	"cellmaster/gui/scenegraph"
 	"fmt"
 
 	gl "github.com/go-gl/gl/v3.1/gles2"
@@ -54,9 +55,16 @@ func RenderTree(node renderGraph.IRenderNode) {
 	}
 }
 
-func (r *GlesRenderer) RenderLoop(scene *gui.Scene) {
+func (r *GlesRenderer) RenderLoop(scene *scenegraph.Scene) {
 	for !r.window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+		// Update scene size
+		// TODO: Add if resized check
+		width, height := r.window.GetFramebufferSize()
+		scene.Root.MainView.Dimetions.Height = width
+		scene.Root.MainView.Dimetions.Height = height
+
 		renderGraph := ParseScene(&scene.Root)
 		// renderGraph.Root.Render()
 		RenderTree(&renderGraph.Root)
@@ -100,7 +108,7 @@ func getContainerRenderer(v gui.IContainer) renderGraph.IRenderNode {
 	}
 }
 
-func ParseScene(scene *gui.SceneRoot) *renderGraph.RenderGraph {
+func ParseScene(scene *scenegraph.SceneRoot) *renderGraph.RenderGraph {
 	rg := renderGraph.NewRenderGraph()
 	var copyTree func(gui.IContainer, renderGraph.IRenderNode)
 	copyTree = func(scn gui.IContainer, prev renderGraph.IRenderNode) {

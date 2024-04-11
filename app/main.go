@@ -1,10 +1,10 @@
 package main
 
 import (
-	"cellmaster/gui"
 	"cellmaster/gui/backends"
 	"cellmaster/gui/elements"
 	"cellmaster/gui/layouts"
+	"cellmaster/gui/scenegraph"
 	"runtime"
 )
 
@@ -20,6 +20,6 @@ func main() {
 		AddChild(&elements.Placeholder{}).
 		AddChild(&elements.Placeholder{})
 
-	scene := gui.NewScene(tilled)
+	scene := scenegraph.NewScene(tilled)
 	renderer.RenderLoop(scene)
 }
