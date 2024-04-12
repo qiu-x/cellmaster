@@ -27,10 +27,11 @@ func (r *GlesRenderer) Init() {
 	glfw.WindowHint(glfw.ClientAPI, glfw.OpenGLESAPI)
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLAnyProfile)
 	glfw.WindowHint(glfw.ContextVersionMajor, 3)
+	glfw.WindowHint(glfw.Resizable, glfw.True)
 	glfw.WindowHint(glfw.ContextVersionMinor, 1)
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 
-	r.window, err = glfw.CreateWindow(640, 480, "Testing", nil, nil)
+	r.window, err = glfw.CreateWindow(1280, 720, "Testing", nil, nil)
 	if err != nil {
 		panic(err)
 	}
