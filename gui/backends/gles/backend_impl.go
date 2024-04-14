@@ -14,7 +14,13 @@ import (
 )
 
 type GlesRenderer struct {
-	window *glfw.Window
+	glesWindow *glfw.Window
+	window gui.Window
+}
+
+// GetWindo implements backends.RenderingBackend.
+func (r *GlesRenderer) GetWindow() *gui.Window {
+	return &r.window
 }
 
 func (r *GlesRenderer) Init() {
@@ -31,12 +37,12 @@ func (r *GlesRenderer) Init() {
 	glfw.WindowHint(glfw.ContextVersionMinor, 1)
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 
-	r.window, err = glfw.CreateWindow(1280, 720, "Testing", nil, nil)
+	r.glesWindow, err = glfw.CreateWindow(1280, 720, "Testing", nil, nil)
 	if err != nil {
 		panic(err)
 	}
 
-	r.window.MakeContextCurrent()
+	r.glesWindow.MakeContextCurrent()
 
 	if err := gl.Init(); err != nil {
 		panic(err)
@@ -57,19 +63,19 @@ func RenderTree(node renderGraph.IRenderNode) {
 }
 
 func (r *GlesRenderer) RenderLoop(scene *scenegraph.Scene) {
-	for !r.window.ShouldClose() {
+	for !r.glesWindow.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 		// Update scene size
 		// TODO: Add if resized check
-		width, height := r.window.GetFramebufferSize()
-		scene.Root.MainView.Dimetions.Height = width
-		scene.Root.MainView.Dimetions.Height = height
+		width, height := r.glesWindow.GetFramebufferSize()
+		r.window.Size.Height = width
+		r.window.Size.Height = height
 
 		renderGraph := ParseScene(&scene.Root)
 		// renderGraph.Root.Render()
 		RenderTree(&renderGraph.Root)
-		r.window.SwapBuffers()
+		r.glesWindow.SwapBuffers()
 		glfw.PollEvents()
 	}
 }
