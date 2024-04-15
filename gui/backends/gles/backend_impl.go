@@ -77,6 +77,7 @@ func (r *GlesRenderer) RenderLoop(scene *scenegraph.Scene) {
 		RenderTree(&renderGraph.Root)
 		r.glesWindow.SwapBuffers()
 		glfw.PollEvents()
+		gl.Viewport(0, 0, int32(width), int32(height))
 	}
 }
 
