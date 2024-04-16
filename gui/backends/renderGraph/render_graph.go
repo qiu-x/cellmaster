@@ -38,9 +38,7 @@ func (n *RenderNodeRoot) Parent() *IRenderNode {
 	return nil
 }
 
-func (n *RenderNodeRoot) Render() {
-	return
-}
+func (n *RenderNodeRoot) Render() {}
 
 type RenderGraph struct {
 	Root RenderNodeRoot

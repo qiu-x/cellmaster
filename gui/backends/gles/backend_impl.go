@@ -88,7 +88,7 @@ func (r *GlesRenderer) CleanUp() {
 func getRenderNode(v gui.IElement) renderGraph.IRenderNode {
 	switch v.(type) {
 	case gui.IContainer:
-		return getContainerRenderer(v.(gui.IContainer))
+		return getContainerRenderer(v)
 	case gui.IElement:
 		return getElementRenderer(v)
 	default:
@@ -105,7 +105,8 @@ func getElementRenderer(v gui.IElement) renderGraph.IRenderNode {
 	}
 }
 
-func getContainerRenderer(v gui.IContainer) renderGraph.IRenderNode {
+func getContainerRenderer(e gui.IElement) renderGraph.IRenderNode {
+	v := e.(gui.IContainer)
 	switch v.(type) {
 	case *layouts.TiledView:
 		c := &renderNodes.TiledView{}
