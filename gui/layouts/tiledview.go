@@ -26,7 +26,7 @@ func (t *TiledView) AddChild(child gui.IElement) *TiledView {
 	})
 	t.sizes = append(t.sizes, 0)
 	t.offsets = append(t.offsets, 0)
-	t.Recompute()
+	t.ComputeLayout()
 	return t
 }
 
@@ -36,11 +36,11 @@ func NewTiledLayout() *TiledView {
 		sizes:    make([]float64, 0),
 		offsets:  make([]float64, 0),
 	}
-	tiledView.Recompute()
+	tiledView.ComputeLayout()
 	return tiledView
 }
 
-func (t *TiledView) Recompute() {
+func (t *TiledView) ComputeLayout() {
 	for i := range t.sizes {
 		t.sizes[i] = 1/float64(len(t.children)) + t.offsets[i]
 	}
@@ -57,5 +57,5 @@ func (t *TiledView) Resize(elm int, newSize float64) {
 		t.offsets[i] -= newSize / float64(len(t.children)-1)
 	}
 	t.offsets[elm] = newSize
-	t.Recompute()
+	t.ComputeLayout()
 }

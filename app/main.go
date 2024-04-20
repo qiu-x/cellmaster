@@ -13,6 +13,7 @@ func init() {
 }
 
 func main() {
+	// TODO: Separate window out of renderers
 	renderer := backends.GetBestBackend()
 	defer renderer.CleanUp()
 

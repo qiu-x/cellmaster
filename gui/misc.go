@@ -5,6 +5,7 @@ type Rect struct {
 }
 
 type IContainer interface {
+	Parent() *Slot
 	Slots() *[]Slot
 	ComputeLayout()
 }
