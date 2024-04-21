@@ -13,14 +13,14 @@ func init() {
 }
 
 func main() {
-	// TODO: Separate window out of renderers
 	renderer := backends.GetBestBackend()
+	window := renderer.GetWindow()
 	defer renderer.CleanUp()
 
 	tilled := layouts.NewTiledLayout().
 		AddChild(&elements.Placeholder{}).
 		AddChild(&elements.Placeholder{})
 
-	scene := scenegraph.NewScene(tilled)
+	scene := scenegraph.NewScene(tilled, window)
 	renderer.RenderLoop(scene)
 }
