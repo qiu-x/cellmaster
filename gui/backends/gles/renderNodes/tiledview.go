@@ -39,13 +39,6 @@ type TiledView struct {
 	vao       uint32
 }
 
-var bgVerts = []float32{
-	-1.0, 1.0, 0.1, 0.0, 0.0,
-	-1.0, -1.0, 0.1, 0.0, 1.0,
-	1.0, 1.0, 0.1, 1.0, 0.0,
-	1.0, -1.0, 0.1, 1.0, 1.0,
-}
-
 func (t *TiledView) Load(tiledview gui.IContainer) {
 	t.reference = tiledview.(*layouts.TiledView)
 
@@ -58,10 +51,17 @@ func (t *TiledView) Load(tiledview gui.IContainer) {
 	gl.GenVertexArrays(1, &t.vao)
 	gl.BindVertexArray(t.vao)
 
+	verts := []float32{
+		-1.0, 1.0, 0.1, 0.0, 0.0,
+		-1.0, -1.0, 0.1, 0.0, 1.0,
+		1.0, 1.0, 0.1, 1.0, 0.0,
+		1.0, -1.0, 0.1, 1.0, 1.0,
+	}
+
 	var vbo uint32
 	gl.GenBuffers(1, &vbo)
 	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
-	gl.BufferData(gl.ARRAY_BUFFER, len(bgVerts)*4, gl.Ptr(bgVerts), gl.STATIC_DRAW)
+	gl.BufferData(gl.ARRAY_BUFFER, len(verts)*4, gl.Ptr(verts), gl.STATIC_DRAW)
 
 	vertAttrib := uint32(gl.GetAttribLocation(t.shader, gl.Str("vert\x00")))
 	gl.EnableVertexAttribArray(vertAttrib)

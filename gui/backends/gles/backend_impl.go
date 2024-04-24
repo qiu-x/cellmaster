@@ -73,7 +73,6 @@ func (r *GlesRenderer) RenderLoop(scene *scenegraph.Scene) {
 		r.window.Size.Height = height
 
 		renderGraph := ParseScene(&scene.Root)
-		// renderGraph.Root.Render()
 		RenderTree(&renderGraph.Root)
 		r.glesWindow.SwapBuffers()
 		glfw.PollEvents()
