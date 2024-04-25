@@ -51,9 +51,17 @@ func (t *TiledView) Load(tiledview gui.IContainer) {
 	gl.GenVertexArrays(1, &t.vao)
 	gl.BindVertexArray(t.vao)
 
+	// Define the vertices for two rectangles filling the window and next to each other
 	verts := []float32{
+		// First Rectangle
 		-1.0, 1.0, 0.1, 0.0, 0.0,
 		-1.0, -1.0, 0.1, 0.0, 1.0,
+		0.0, 1.0, 0.1, 1.0, 0.0,
+		0.0, -1.0, 0.1, 1.0, 1.0,
+
+		// Second Rectangle (tiled) with a gap
+		0.0, 1.0, 0.1, 0.0, 0.0,
+		0.0, -1.0, 0.1, 0.0, 1.0,
 		1.0, 1.0, 0.1, 1.0, 0.0,
 		1.0, -1.0, 0.1, 1.0, 1.0,
 	}
@@ -71,5 +79,6 @@ func (t *TiledView) Load(tiledview gui.IContainer) {
 func (t *TiledView) Render() {
 	gl.UseProgram(t.shader)
 	gl.BindVertexArray(t.vao)
-	gl.DrawArrays(gl.TRIANGLE_STRIP, 0, 4)
+	gl.DrawArrays(gl.TRIANGLE_STRIP, 0, 4)  // Draw the first rectangle
+	// gl.DrawArrays(gl.TRIANGLE_STRIP, 4, 4)  // Draw the second rectangle
 }
