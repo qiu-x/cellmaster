@@ -22,7 +22,7 @@ type GioRenderer struct {
 	window gui.Window
 }
 
-// GetWindo implements backends.RenderingBackend.
+// GetWindow implements backends.RenderingBackend.
 func (r *GioRenderer) GetWindow() *gui.Window {
 	return &r.window
 }

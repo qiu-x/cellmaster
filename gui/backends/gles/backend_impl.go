@@ -18,7 +18,7 @@ type GlesRenderer struct {
 	window gui.Window
 }
 
-// GetWindo implements backends.RenderingBackend.
+// GetWindow implements backends.RenderingBackend.
 func (r *GlesRenderer) GetWindow() *gui.Window {
 	return &r.window
 }
