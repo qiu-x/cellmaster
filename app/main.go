@@ -76,19 +76,27 @@ func (ui UI) Loop() error {
 func (ui *UI) Layout(gtx C) D {
 	return ui.Resize.Layout(gtx,
 		func(gtx C) D {
-			return layout.UniformInset(unit.Dp(4)).Layout(gtx, func(gtx C) D {
-				c := color.NRGBA{R: 40, G: 40, B: 40, A: 255}
-				paint.FillShape(gtx.Ops, c, clip.Rect{Max: gtx.Constraints.Max}.Op())
-				return D{Size: gtx.Constraints.Max}
-
-			})
-		},
-		func(gtx C) D {
-			return layout.UniformInset(unit.Dp(4)).Layout(gtx, func(gtx C) D {
-				c := color.NRGBA{R: 40, G: 40, B: 40, A: 255}
-				paint.FillShape(gtx.Ops, c, clip.Rect{Max: gtx.Constraints.Max}.Op())
-				return D{Size: gtx.Constraints.Max}
-			})
+			return layout.Flex{}.Layout(gtx,
+				layout.Rigid(func(gtx C) D {
+					return layout.Stack{}.Layout(gtx,
+						layout.Expanded(func(gtx C) D {
+							c := color.NRGBA{R: 40, G: 40, B: 40, A: 255}
+							paint.FillShape(gtx.Ops, c, clip.Rect{Max: gtx.Constraints.Max}.Op())
+							return D{Size: gtx.Constraints.Max}
+						}),
+						layout.Stacked(func(gtx C) D {
+							return layout.UniformInset(unit.Dp(16)).Layout(gtx,
+								material.H6(ui.Theme.Base, "Navigation").Layout,
+							)
+						}),
+					)
+				}),
+				layout.Flexed(1, func(gtx C) D {
+					c := color.NRGBA{R: 40, G: 40, B: 40, A: 255}
+					paint.FillShape(gtx.Ops, c, clip.Rect{Max: gtx.Constraints.Max}.Op())
+					return D{Size: gtx.Constraints.Max}
+				}),
+			)
 		},
 		func(gtx C) D {
 			rect := image.Rectangle{
@@ -100,5 +108,8 @@ func (ui *UI) Layout(gtx C) D {
 			paint.FillShape(gtx.Ops, color.NRGBA{A: 255}, clip.Rect(rect).Op())
 			return D{Size: rect.Max}
 		},
+		func(gtx C) D {
+			return layout.Dimensions{}
+		}, // Placeholder for the third layout
 	)
 }
