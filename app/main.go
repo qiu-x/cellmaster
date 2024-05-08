@@ -109,11 +109,13 @@ func (ui *UI) Layout(gtx C) D {
 			},
 		)
 	})
-	bar := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-		return ui.AppBar.Layout(gtx, ui.Theme.Base, "Menu", "Actions")
+	barFlex := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+		bar := ui.AppBar.Layout(gtx, ui.Theme.Base, "Menu", "Actions")
+		gtx.Constraints.Max.Y = gtx.Dp(unit.Dp(16))
+		return bar
 	})
 
 	flex := layout.Flex{Axis: layout.Vertical}
-	flex.Layout(gtx, bar, tiled)
+	flex.Layout(gtx, barFlex, tiled)
 	return layout.Dimensions{Size: gtx.Constraints.Max}
 }
