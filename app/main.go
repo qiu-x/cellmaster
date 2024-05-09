@@ -83,7 +83,7 @@ func (ui *UI) Layout(gtx C) D {
 	tiled := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
 		return ui.Resize.Layout(gtx,
 			func(gtx C) D {
-				return layout.UniformInset(unit.Dp(4)).Layout(gtx, func(gtx C) D {
+				return layout.UniformInset(unit.Dp(2)).Layout(gtx, func(gtx C) D {
 					c := color.NRGBA{R: 40, G: 40, B: 40, A: 255}
 					paint.FillShape(gtx.Ops, c, clip.Rect{Max: gtx.Constraints.Max}.Op())
 					return D{Size: gtx.Constraints.Max}
@@ -91,16 +91,17 @@ func (ui *UI) Layout(gtx C) D {
 				})
 			},
 			func(gtx C) D {
-				return layout.UniformInset(unit.Dp(4)).Layout(gtx, func(gtx C) D {
+				tile := layout.UniformInset(unit.Dp(2)).Layout(gtx, func(gtx C) D {
 					c := color.NRGBA{R: 40, G: 40, B: 40, A: 255}
 					paint.FillShape(gtx.Ops, c, clip.Rect{Max: gtx.Constraints.Max}.Op())
 					return D{Size: gtx.Constraints.Max}
 				})
+				return tile
 			},
 			func(gtx C) D {
 				rect := image.Rectangle{
 					Max: image.Point{
-						X: (gtx.Dp(unit.Dp(4))),
+						X: (gtx.Dp(unit.Dp(3))),
 						Y: (gtx.Constraints.Max.Y),
 					},
 				}
