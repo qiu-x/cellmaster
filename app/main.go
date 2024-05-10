@@ -80,7 +80,7 @@ func (ui UI) Loop() error {
 }
 
 func (ui *UI) Layout(gtx C) D {
-	tiled := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
+	tiled := layout.Flexed(.5, func(gtx layout.Context) layout.Dimensions {
 		return ui.Resize.Layout(gtx,
 			func(gtx C) D {
 				return layout.UniformInset(unit.Dp(2)).Layout(gtx, func(gtx C) D {
@@ -110,13 +110,8 @@ func (ui *UI) Layout(gtx C) D {
 			},
 		)
 	})
-	barFlex := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-		bar := ui.AppBar.Layout(gtx, ui.Theme.Base, "Menu", "Actions")
-		gtx.Constraints.Max.Y = gtx.Dp(unit.Dp(16))
-		return bar
-	})
 
 	flex := layout.Flex{Axis: layout.Vertical}
-	flex.Layout(gtx, barFlex, tiled)
+	flex.Layout(gtx, tiled)
 	return layout.Dimensions{Size: gtx.Constraints.Max}
 }
