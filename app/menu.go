@@ -33,6 +33,10 @@ func (m *Menu) Close() {
 	m.lastIdx = -1
 }
 
+func (m *Menu) Toggle() {
+	m.open = !m.open
+}
+
 func (m *Menu) Layout(gtx layout.Context) layout.Dimensions {
 	if !m.open {
 		return layout.Dimensions{}
