@@ -24,15 +24,6 @@ type Menu struct {
 	lastIdx int
 }
 
-func (m *Menu) Open() {
-	m.open = true
-}
-
-func (m *Menu) Close() {
-	m.open = false
-	m.lastIdx = -1
-}
-
 func (m *Menu) Toggle() {
 	m.open = !m.open
 }
