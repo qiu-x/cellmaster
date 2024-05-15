@@ -21,15 +21,13 @@ import (
 
 func main() {
 	th := NewTheme(gofont.Collection())
-	modal := component.NewModal()
 
 	ui := UI{
 		Window: new(app.Window),
-		AppBar: component.NewAppBar(modal),
 		Theme:  th,
+		Menu:   &Menu{},
 		Resize: component.Resize{Ratio: 0.5},
 	}
-	ui.AppBar.Title = "CellMaster"
 
 	go func() {
 		if err := ui.Loop(); err != nil {
@@ -48,7 +46,7 @@ type (
 type UI struct {
 	Window *app.Window
 	Theme  *Theme
-	*component.AppBar
+	Menu   *Menu
 	component.Resize
 }
 
@@ -119,8 +117,7 @@ func (ui *UI) Layout(gtx C) D {
 		)
 	})
 	barFlex := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-		bar := ui.AppBar.Layout(gtx, ui.Theme.Base, "Menu", "Actions")
-		gtx.Constraints.Max.Y = gtx.Dp(unit.Dp(16))
+		bar := ui.Menu.Layout(gtx)
 		return bar
 	})
 
