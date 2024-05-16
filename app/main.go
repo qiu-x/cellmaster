@@ -25,7 +25,17 @@ func main() {
 	ui := UI{
 		Window: new(app.Window),
 		Theme:  th,
-		Menu:   &Menu{},
+		Menu: &Menu{
+			Items: []MenuItem{{
+				Label:    "File",
+				Shortcut: "f",
+				Disabled: false,
+				Handler: func() {
+				},
+			}},
+			Open:    true,
+			lastIdx: 0,
+		},
 		Resize: component.Resize{Ratio: 0.5},
 	}
 
@@ -116,12 +126,12 @@ func (ui *UI) Layout(gtx C) D {
 			},
 		)
 	})
-	barFlex := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-		bar := ui.Menu.Layout(gtx)
-		return bar
+
+	bar := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+		return ui.Menu.Layout(gtx)
 	})
 
 	flex := layout.Flex{Axis: layout.Vertical}
-	flex.Layout(gtx, barFlex, tiled)
+	flex.Layout(gtx, bar, tiled)
 	return layout.Dimensions{Size: gtx.Constraints.Max}
 }

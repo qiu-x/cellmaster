@@ -20,16 +20,16 @@ type MenuItem struct {
 
 type Menu struct {
 	Items   []MenuItem
-	open    bool
+	Open    bool
 	lastIdx int
 }
 
 func (m *Menu) Toggle() {
-	m.open = !m.open
+	m.Open = !m.Open
 }
 
 func (m *Menu) Layout(gtx layout.Context) layout.Dimensions {
-	if !m.open {
+	if !m.Open {
 		return layout.Dimensions{}
 	}
 
@@ -65,15 +65,16 @@ func (m *Menu) menuIcon(gtx layout.Context) layout.Widget {
 }
 
 func (m *Menu) menuLabel(gtx layout.Context) layout.Widget {
+	th := material.NewTheme()
 	return func(gtx layout.Context) layout.Dimensions {
-		label := material.Body1(nil, m.Items[m.lastIdx].Label)
+		label := material.Body1(th, m.Items[m.lastIdx].Label)
 		label.Color = color.NRGBA{R: 255, G: 255, B: 255, A: 255}
 		return layout.Center.Layout(gtx, label.Layout)
 	}
 }
 
 func (m *Menu) Event(gtx layout.Context, ev interface{}) {
-	if m.open {
+	if m.Open {
 		switch e := ev.(type) {
 		case pointer.Event:
 			// Handle pointer event here
