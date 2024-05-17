@@ -41,8 +41,8 @@ func (m *Menu) Layout(gtx layout.Context) layout.Dimensions {
 			return layout.UniformInset(unit.Dp(8)).Layout(gtx,
 				func(gtx layout.Context) layout.Dimensions {
 					return layout.Flex{Alignment: layout.Middle}.Layout(gtx,
-						layout.Flexed(0.3, m.menuIcon(gtx)),
-						layout.Flexed(0.7, m.menuLabel(gtx)),
+						layout.Flexed(0.1, m.menuIcon(gtx)),
+						layout.Flexed(0.9, m.menuLabel(gtx)),
 					)
 				},
 			)

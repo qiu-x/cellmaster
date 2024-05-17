@@ -96,7 +96,7 @@ func Overflow() []component.OverflowAction {
 }
 
 func (ui *UI) Layout(gtx C) D {
-	tiled := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
+	tiled := layout.Flexed(0.98, func(gtx layout.Context) layout.Dimensions {
 		return ui.Resize.Layout(gtx,
 			func(gtx C) D {
 				return layout.UniformInset(unit.Dp(2)).Layout(gtx, func(gtx C) D {
@@ -127,7 +127,7 @@ func (ui *UI) Layout(gtx C) D {
 		)
 	})
 
-	bar := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+	bar := layout.Flexed(0.02, func(gtx layout.Context) layout.Dimensions {
 		return ui.Menu.Layout(gtx)
 	})
 
