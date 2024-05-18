@@ -41,8 +41,7 @@ func (m *Menu) Layout(gtx layout.Context) layout.Dimensions {
 			return layout.UniformInset(unit.Dp(8)).Layout(gtx,
 				func(gtx layout.Context) layout.Dimensions {
 					return layout.Flex{Alignment: layout.Middle}.Layout(gtx,
-						layout.Flexed(0.1, m.menuIcon(gtx)),
-						layout.Flexed(0.9, m.menuLabel(gtx)),
+						layout.Flexed(1, m.menuLabel(gtx)),
 					)
 				},
 			)
@@ -68,7 +67,7 @@ func (m *Menu) menuLabel(gtx layout.Context) layout.Widget {
 	th := material.NewTheme()
 	return func(gtx layout.Context) layout.Dimensions {
 		label := material.Body1(th, m.Items[m.lastIdx].Label)
-		label.Color = color.NRGBA{R: 255, G: 255, B: 255, A: 255}
+		label.Color = color.NRGBA{R: 0, G: 0, B: 0, A: 255}
 		return layout.Center.Layout(gtx, label.Layout)
 	}
 }
