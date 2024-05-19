@@ -40,7 +40,7 @@ func (m *Menu) Layout(gtx layout.Context) layout.Dimensions {
 		layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 			return layout.UniformInset(unit.Dp(8)).Layout(gtx,
 				func(gtx layout.Context) layout.Dimensions {
-					return layout.Flex{Alignment: layout.Middle}.Layout(gtx,
+					return layout.Flex{Alignment: layout.Start}.Layout(gtx,
 						layout.Flexed(1, m.menuLabel(gtx)),
 					)
 				},
