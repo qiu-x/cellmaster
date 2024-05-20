@@ -127,7 +127,7 @@ func (ui *UI) Layout(gtx C) D {
 		)
 	})
 
-	bar := layout.Flexed(0.02, func(gtx layout.Context) layout.Dimensions {
+	bar := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 		return ui.Menu.Layout(gtx)
 	})
 
