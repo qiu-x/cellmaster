@@ -26,13 +26,20 @@ func main() {
 		Window: new(app.Window),
 		Theme:  th,
 		Menu: &Menu{
-			Items: []MenuItem{{
-				Label:    "File",
-				Shortcut: "f",
-				Disabled: false,
-				Handler: func() {
+			Items: []MenuItem{
+				{
+					Label:    "File",
+					Shortcut: "f",
+					Disabled: false,
+					Handler: func() {},
 				},
-			}},
+				{
+					Label:    "Help",
+					Shortcut: "h",
+					Disabled: false,
+					Handler: func() {},
+				},
+			},
 			Open:    true,
 			lastIdx: 0,
 		},
