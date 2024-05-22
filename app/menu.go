@@ -49,20 +49,6 @@ func (m *Menu) Layout(gtx layout.Context) layout.Dimensions {
 	)
 }
 
-func (m *Menu) menuIcon(gtx layout.Context) layout.Widget {
-	return func(gtx layout.Context) layout.Dimensions {
-		return layout.Inset{Top: unit.Dp(4)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-			return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-				return layout.UniformInset(unit.Dp(4)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-					paint.ColorOp{Color: color.NRGBA{R: 255, G: 255, B: 255, A: 255}}.Add(gtx.Ops)
-					paint.PaintOp{}.Add(gtx.Ops)
-					return layout.Dimensions{Size: image.Point{X: 32, Y: 32}}
-				})
-			})
-		})
-	}
-}
-
 func (m *Menu) menuLabel(gtx layout.Context) layout.Widget {
 	th := material.NewTheme()
 	return func(gtx layout.Context) layout.Dimensions {
@@ -81,4 +67,3 @@ func (m *Menu) Event(gtx layout.Context, ev interface{}) {
 		}
 	}
 }
-
