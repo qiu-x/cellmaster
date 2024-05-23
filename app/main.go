@@ -15,6 +15,7 @@ import (
 	"gioui.org/op/paint"
 	"gioui.org/text"
 	"gioui.org/unit"
+	"gioui.org/widget"
 	"gioui.org/widget/material"
 	"gioui.org/x/component"
 )
@@ -31,19 +32,25 @@ func main() {
 					Label:    "File",
 					Shortcut: "f",
 					Disabled: false,
-					Handler: func() {},
+					Handler: func() {
+						log.Println("File menu clicked")
+					},
 				},
 				{
 					Label:    "Help",
 					Shortcut: "h",
 					Disabled: false,
-					Handler: func() {},
+					Handler: func() {
+						log.Println("Help menu clicked")
+					},
 				},
 			},
 			Open:    true,
 			lastIdx: 0,
 		},
-		Resize: component.Resize{Ratio: 0.5},
+		Resize:   component.Resize{Ratio: 0.5},
+		Status:   &widget.Label{},
+		StatusText: "Ready",
 	}
 
 	go func() {
@@ -65,6 +72,8 @@ type UI struct {
 	Theme  *Theme
 	Menu   *Menu
 	component.Resize
+	Status     *widget.Label
+	StatusText string
 }
 
 type Theme struct {
@@ -138,7 +147,13 @@ func (ui *UI) Layout(gtx C) D {
 		return ui.Menu.Layout(gtx)
 	})
 
+	statusBar := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+		return layout.UniformInset(unit.Dp(2)).Layout(gtx, func(gtx C) D {
+			return material.Label(ui.Theme.Base, unit.Sp(14), ui.StatusText).Layout(gtx)
+		})
+	})
+
 	flex := layout.Flex{Axis: layout.Vertical}
-	flex.Layout(gtx, bar, tiled)
+	flex.Layout(gtx, bar, tiled, statusBar)
 	return layout.Dimensions{Size: gtx.Constraints.Max}
 }
