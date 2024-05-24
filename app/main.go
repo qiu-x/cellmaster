@@ -21,11 +21,11 @@ import (
 )
 
 func main() {
-	th := NewTheme(gofont.Collection())
+	theme := NewTheme(gofont.Collection())
 
 	ui := UI{
 		Window: new(app.Window),
-		Theme:  th,
+		Theme:  theme,
 		Menu: &Menu{
 			Items: []MenuItem{
 				{
