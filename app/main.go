@@ -48,8 +48,8 @@ func main() {
 			Open:    true,
 			lastIdx: 0,
 		},
-		Resize:   component.Resize{Ratio: 0.5},
-		Status:   &widget.Label{},
+		Resize:     component.Resize{Ratio: 0.5},
+		Status:     &widget.Label{},
 		StatusText: "Ready",
 	}
 
