@@ -1,12 +1,11 @@
 package main
 
 import (
-	"image"
 	"image/color"
 
 	"gioui.org/io/pointer"
 	"gioui.org/layout"
-	"gioui.org/op/paint"
+	"gioui.org/widget"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
 )
@@ -40,8 +39,8 @@ func (m *Menu) Layout(gtx layout.Context) layout.Dimensions {
 		layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 			return layout.UniformInset(unit.Dp(8)).Layout(gtx,
 				func(gtx layout.Context) layout.Dimensions {
-					return layout.Flex{Alignment: layout.Start}.Layout(gtx,
-						layout.Flexed(1, m.menuLabel(gtx)),
+					return layout.Flex{Axis: layout.Vertical, Alignment: layout.Start}.Layout(gtx,
+						m.menuItems(gtx)...,
 					)
 				},
 			)
@@ -49,13 +48,22 @@ func (m *Menu) Layout(gtx layout.Context) layout.Dimensions {
 	)
 }
 
-func (m *Menu) menuLabel(gtx layout.Context) layout.Widget {
-	th := material.NewTheme()
-	return func(gtx layout.Context) layout.Dimensions {
-		label := material.Body1(th, m.Items[m.lastIdx].Label)
-		label.Color = color.NRGBA{R: 0, G: 0, B: 0, A: 255}
-		return layout.Center.Layout(gtx, label.Layout)
+func (m *Menu) menuItems(gtx layout.Context) []layout.FlexChild {
+	var items []layout.FlexChild
+	for i := range m.Items {
+		i := i // capture loop variable
+		item := m.Items[i]
+		items = append(items, layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+			return layout.Inset{Bottom: unit.Dp(4)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+				btn := material.Button(material.NewTheme(), new(widget.Clickable), item.Label)
+				if item.Disabled {
+					btn.Background = color.NRGBA{R: 200, G: 200, B: 200, A: 255}
+				}
+				return btn.Layout(gtx)
+			})
+		}))
 	}
+	return items
 }
 
 func (m *Menu) Event(gtx layout.Context, ev interface{}) {

@@ -10,10 +10,8 @@ import (
 	"gioui.org/font"
 	"gioui.org/font/gofont"
 	"gioui.org/layout"
-	"gioui.org/op"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
-	"gioui.org/text"
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
@@ -82,32 +80,19 @@ type Theme struct {
 
 func NewTheme(font []font.FontFace) *Theme {
 	th := material.NewTheme()
-	th.Shaper = text.NewShaper(text.WithCollection(font))
 	return &Theme{
 		Base: th,
 	}
 }
 
 func (ui UI) Loop() error {
-	var ops op.Ops
 	for {
 		e := ui.Window.Event()
 		switch e := e.(type) {
 		case app.DestroyEvent:
 			return e.Err
 		case app.FrameEvent:
-			gtx := app.NewContext(&ops, e)
-			ui.Layout(gtx)
-			e.Frame(gtx.Ops)
 		}
-	}
-}
-
-func Overflow() []component.OverflowAction {
-	return []component.OverflowAction{
-		{
-			Name: "Close",
-		},
 	}
 }
 
@@ -119,22 +104,20 @@ func (ui *UI) Layout(gtx C) D {
 					c := color.NRGBA{R: 40, G: 40, B: 40, A: 255}
 					paint.FillShape(gtx.Ops, c, clip.Rect{Max: gtx.Constraints.Max}.Op())
 					return D{Size: gtx.Constraints.Max}
-
 				})
 			},
 			func(gtx C) D {
-				tile := layout.UniformInset(unit.Dp(2)).Layout(gtx, func(gtx C) D {
+				return layout.UniformInset(unit.Dp(2)).Layout(gtx, func(gtx C) D {
 					c := color.NRGBA{R: 40, G: 40, B: 40, A: 255}
 					paint.FillShape(gtx.Ops, c, clip.Rect{Max: gtx.Constraints.Max}.Op())
 					return D{Size: gtx.Constraints.Max}
 				})
-				return tile
 			},
 			func(gtx C) D {
 				rect := image.Rectangle{
 					Max: image.Point{
-						X: (gtx.Dp(unit.Dp(3))),
-						Y: (gtx.Constraints.Max.Y),
+						X: gtx.Dp(unit.Dp(3)),
+						Y: gtx.Constraints.Max.Y,
 					},
 				}
 				paint.FillShape(gtx.Ops, color.NRGBA{A: 255}, clip.Rect(rect).Op())
@@ -157,3 +140,4 @@ func (ui *UI) Layout(gtx C) D {
 	flex.Layout(gtx, bar, tiled, statusBar)
 	return layout.Dimensions{Size: gtx.Constraints.Max}
 }
+
